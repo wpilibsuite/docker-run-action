@@ -11,20 +11,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - name: Run docker action and set output for testing
+      - name: Run docker action and save version for testing
         uses: ./
         id: run-docker
         with:
-          image: docker:20.10.3
+          image: docker:29.0.4
+          options: -v ${{ github.workspace }}:/work
           run: |
-            echo "::set-output name=docker-version::`echo $DOCKER_VERSION`"
+            echo "$DOCKER_VERSION" > /work/docker_version
       - name: Test the output
-        uses: actions/github-script@v3
+        uses: actions/github-script@v8
         with:
           script: |
-            const dockerVersion = '${{ steps.run-docker.outputs.docker-version }}';
-            if (dockerVersion !== '20.10.3') {
-              core.setFailed(`Smoke Test Failed`);
+            const fs = require('fs');
+            const dockerVersion = fs.readFileSync('docker_version', 'utf8').trim();
+            const expected = '29.0.4';
+            if (dockerVersion !== expected) {
+              core.setFailed(`Smoke Test Failed: expected ${expected} but received ${dockerVersion}`);
             }
   volume-mount-test:
     runs-on: ubuntu-latest
@@ -39,12 +42,13 @@ jobs:
           image: docker
           options: -v ${{ github.workspace }}:/work
           run: |
-            echo "::set-output name=file-contents::`cat /work/someFile`"
+            cp /work/someFile /work/secondFile
       - name: Check if file contents match
         uses: actions/github-script@v8
         with:
           script: |
-            const fileContents = '${{ steps.run-docker.outputs.file-contents }}';
+            const fs = require('fs');
+            const fileContents = fs.readFileSync('secondFile', 'utf8').trim();
             if (fileContents !== 'some text') {
               core.setFailed(`Unable to mount workspace volume`);
             }
