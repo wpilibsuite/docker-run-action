@@ -2,7 +2,7 @@
 
 - run a specific step in docker.
 - run an image built by a previous step.
-- See https://github.com/addnab/docker-run-action/blob/main/action.yml for all the available inputs.
+- See https://github.com/wpilibsuite/docker-run-action/blob/main/action.yml for all the available inputs.
 
 ## Examples
 
@@ -10,8 +10,8 @@
 
 ```yaml
 - name: Checkout 
-  uses: actions/checkout@v2 # Required to mount the Github Workspace to a volume 
-- uses: addnab/docker-run-action@v3
+  uses: actions/checkout@v6 # Required to mount the Github Workspace to a volume 
+- uses: wpilibsuite/docker-run-action@v4
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -25,7 +25,7 @@
 
 #### run a privately-owned image
 ```yaml
-- uses: addnab/docker-run-action@v3
+- uses: wpilibsuite/docker-run-action@v4
   with:
     username: ${{ secrets.DOCKER_USERNAME }}
     password: ${{ secrets.DOCKER_PASSWORD }}
@@ -36,11 +36,11 @@
 
 #### run an image built by a previous step
 ```yaml
-- uses: docker/build-push-action@v2
+- uses: docker/build-push-action@v6
   with:
     tags: test-image:latest
     push: false
-- uses: addnab/docker-run-action@v3
+- uses: wpilibsuite/docker-run-action@v4
   with:
     image: test-image:latest
     run: echo "hello world"
@@ -50,7 +50,7 @@
 #### use a specific shell (default: sh). 
 *Note: The shell must be installed in the container*
 ```yaml
-- uses: addnab/docker-run-action@v3
+- uses: wpilibsuite/docker-run-action@v4
   with:
     image: docker:latest
     shell: bash

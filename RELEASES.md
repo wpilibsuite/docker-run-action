@@ -1,4 +1,11 @@
-# addnab/docker-run-action Releases
+# wpilibsuite/docker-run-action Releases
+
+### 4.0.0
+
+- forked from https://github.com/addnab/docker-run-action
+- Upgrade to docker 29.1 https://github.com/wpilibsuite/docker-run-action/pull/1
+- Replace deprecated uses of set-output in tests https://github.com/wpilibsuite/docker-run-action/pull/2
+- Use bash shell parameter expansion instead of semicolon_delimited_script https://github.com/addnab/docker-run-action/pull/17
 
 ### 3.0.0
 
